@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using OMS.Application.Contracts.Services;
 using OMS.Application.Services.Orders;
 using OMS.Domain.Orders.Repositories;
 using OMS.Infrastructure.Persistance.EF.Context;
@@ -21,7 +20,6 @@ namespace OMS.Infrastructure.Persistance.EF.Initializations
             {
                 cfg.UseSqlServer(connectionstring);
             });
-            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderCommandRepository, OrderRepository>();
 
         }

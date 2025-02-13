@@ -12,10 +12,11 @@ namespace OMS.Infrastructure.Persistance.EF.Repositories
         {
             _context = context;
         }
-        public void Add(Order order)
+        public int Add(Order order)
         {
             _context.Orders.Add(order);
             _context.SaveChanges();
+            return order.Id;
         }
     }
 }

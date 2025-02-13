@@ -1,11 +1,16 @@
 ﻿using Grpc.Net.Client;
 using InventoryService.Proto;
+using MassTransit;
+using MassTransit.Transports;
 using Microsoft.Extensions.Configuration;
-using OMS.Application.Contracts.Dtos;
-using OMS.Application.Contracts.Services;
+using OMS.Application.Services.StateMachine;
 using OMS.Domain.Orders;
 using OMS.Domain.Orders.Repositories;
 using PaymentService.Proto;
+using OrderItem = OMS.Application.Services.Events.OrderItem;
+using OMS.Application.Services.Events;
+using OMS.Application.Contracts.Dtos;
+using OMS.Application.Contracts.Services;
 
 namespace OMS.Application.Services.Orders
 {
@@ -15,13 +20,17 @@ namespace OMS.Application.Services.Orders
         private readonly string _PayServerAddress;
         private readonly string _InventoryServerAddress;
         private readonly IOrderCommandRepository _orderCommandRepository;
-        public OrderService(IConfiguration configuration, IOrderCommandRepository orderCommandRepository)
+        private readonly IPublishEndpoint _publishEndpoint;
+
+        public OrderService(IConfiguration configuration, IOrderCommandRepository orderCommandRepository, IPublishEndpoint publishEndpoint)
         {
             _PayServerAddress = configuration.GetSection("PayServer")?.Value ?? "";
 
             _InventoryServerAddress = configuration.GetSection("InventoryServer")?.Value ?? "";
 
             _orderCommandRepository = orderCommandRepository;
+
+            _publishEndpoint = publishEndpoint;
         }
 
 
@@ -30,10 +39,19 @@ namespace OMS.Application.Services.Orders
             var order = Order.Factory(dto.Items, dto.Description);
 
             _orderCommandRepository.Add(order);
+
+            await _publishEndpoint.Publish(new CreateOrderMessage()
+            {
+                CustomerId = "1",
+                OrderId = order.Id,
+                OrderItemList = new List<OrderItem>(),
+                PaymentAccountId = "2",
+                TotalPrice = order.TotalPrice,
+            });
+
+            //CheckInventory(order.Id);
             
-            CheckInventory(order.Id);
-            
-            CheckPayment(order.Id);
+            //CheckPayment(order.Id);
             
             return true;
         }
