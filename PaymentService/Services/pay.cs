@@ -19,15 +19,5 @@ namespace PaymentService.Services
             });
         }
 
-        //public override async Task<PayResponse> Pay(PayRequest request, ServerCallContext context)
-        //{
-        //    return new PayResponse()
-        //    {
-        //        Suceeded = true,
-        //        Message = "paid"
-        //    };
-
-        //}
-
     }
 }

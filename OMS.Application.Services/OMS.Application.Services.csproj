@@ -18,6 +18,9 @@
 		<Protobuf Include="Protos\PaymentService.proto" GrpcServices="Client" />
 	</ItemGroup>
 	<ItemGroup>
+		<Protobuf Include="Protos\InventoryService.proto" GrpcServices="Client" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
 	</ItemGroup>
   <ItemGroup>

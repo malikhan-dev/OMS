@@ -2,17 +2,27 @@ using OMS.Application.Contracts.Services;
 using OMS.Application.Services.Orders;
 using OMS.Application.Commands.Initialization;
 using OMS.Application.Queries.Initialization;
+using OMS.Domain.Orders.Repositories;
+using OMS.Infrastructure.Persistance.EF.Repositories;
+using OMS.Infrastructure.Persistance.EF.Context;
+using OMS.Infrastructure.Persistance.EF.Initializations;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
+
 builder.Services.InitializeCommands();
+
 builder.Services.InitializeQueries();
-builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.InjectSqlServerEfCoreDependencies("Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True");
 
 var app = builder.Build();
 

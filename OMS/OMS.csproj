@@ -15,6 +15,7 @@
     <ProjectReference Include="..\OMS.Application.Contracts\OMS.Application.Contracts.csproj" />
     <ProjectReference Include="..\OMS.Application.Queries\OMS.Application.Queries.csproj" />
     <ProjectReference Include="..\OMS.Application.Services\OMS.Application.Services.csproj" />
+    <ProjectReference Include="..\OMS.Infrastructure.Persistance.EF\OMS.Infrastructure.Persistance.EF.csproj" />
   </ItemGroup>
 
 </Project>
