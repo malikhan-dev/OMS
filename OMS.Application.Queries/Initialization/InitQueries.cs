@@ -5,7 +5,7 @@ namespace OMS.Application.Queries.Initialization
 {
     public static class InitQueries
     {
-        public static void Init(IServiceCollection services)
+        public static void InitializeQueries(this IServiceCollection services)
         {
             services.AddMediatR(cfg =>
             {

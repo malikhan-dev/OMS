@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OMS.Application.Commands\OMS.Application.Commands.csproj" />
+    <ProjectReference Include="..\OMS.Application.Contracts\OMS.Application.Contracts.csproj" />
+    <ProjectReference Include="..\OMS.Application.Queries\OMS.Application.Queries.csproj" />
+    <ProjectReference Include="..\OMS.Application.Services\OMS.Application.Services.csproj" />
   </ItemGroup>
 
 </Project>

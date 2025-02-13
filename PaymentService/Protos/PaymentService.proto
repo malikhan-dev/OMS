@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "PaymentService.Proto";
+
+package PaymentService;
+
+import "google/protobuf/timestamp.proto";
+
+
+service Pay {
+  rpc Pay(PayRequest) returns (PayResponse);
+
+}
+
+message PayRequest {
+	  int32 price = 1;
+}
+
+
+message PayResponse {
+	string message = 1;
+	bool suceeded = 2; 
+}

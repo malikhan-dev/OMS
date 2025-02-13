@@ -7,15 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.4.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OMS.Application.Contracts\OMS.Application.Contracts.csproj" />
     <ProjectReference Include="..\OMS.Domain\OMS.Domain.csproj" />
   </ItemGroup>
 

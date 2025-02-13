@@ -5,7 +5,7 @@ namespace OMS.Application.Commands.Initialization
 {
     public static class InitCommands
     {
-        public static void Init(IServiceCollection services)
+        public static void InitializeCommands(this IServiceCollection services)
         {
             services.AddMediatR(cfg =>
             {

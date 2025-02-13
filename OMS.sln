@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMS.Domain", "OMS.Domain\OM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMS.Infrastructure.Persistance.EF", "OMS.Infrastructure.Persistance.EF\OMS.Infrastructure.Persistance.EF.csproj", "{313A7F7C-B1FF-4DE6-AD8D-1D1425FD0D50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMS.Application.Contracts", "OMS.Application.Contracts\OMS.Application.Contracts.csproj", "{55325A87-6098-418E-80A9-FB89F8740E1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentService\PaymentService.csproj", "{30FF5895-1571-489F-A918-38520C26E904}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{313A7F7C-B1FF-4DE6-AD8D-1D1425FD0D50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{313A7F7C-B1FF-4DE6-AD8D-1D1425FD0D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{313A7F7C-B1FF-4DE6-AD8D-1D1425FD0D50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55325A87-6098-418E-80A9-FB89F8740E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55325A87-6098-418E-80A9-FB89F8740E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55325A87-6098-418E-80A9-FB89F8740E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55325A87-6098-418E-80A9-FB89F8740E1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30FF5895-1571-489F-A918-38520C26E904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30FF5895-1571-489F-A918-38520C26E904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30FF5895-1571-489F-A918-38520C26E904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30FF5895-1571-489F-A918-38520C26E904}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +73,7 @@ Global
 		{4A22C66E-B749-4B69-9DDA-71B36EA5E56C} = {35C353D3-71EC-4E49-9674-8823A59722D7}
 		{918BAAC6-D569-4F4F-A18C-97A2A270FB5D} = {FAF74449-4DDD-4F4E-A3E1-9842EDC8FEFB}
 		{313A7F7C-B1FF-4DE6-AD8D-1D1425FD0D50} = {74258631-D96A-4428-A24B-A6B24AD2A600}
+		{55325A87-6098-418E-80A9-FB89F8740E1B} = {35C353D3-71EC-4E49-9674-8823A59722D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A07A9B8-9839-4090-A452-F253ABEA2462}
