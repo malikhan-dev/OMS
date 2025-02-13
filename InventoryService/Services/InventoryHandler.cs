@@ -1,17 +1,19 @@
 ﻿using Grpc.Core;
 using InventoryService.Proto;
 using MassTransit;
+using MongoDB.Bson.IO;
+using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Events;
 
 namespace InventoryService.Services
 {
     public class InventoryHandler : InventoryService.Proto.Inventory.InventoryBase
     {
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly AppEventPublisher _eventPublisher;
 
-        public InventoryHandler(IPublishEndpoint publishEndpoint)
+        public InventoryHandler(AppEventPublisher publishEndpoint)
         {
-            this.publishEndpoint = publishEndpoint;
+            this._eventPublisher = publishEndpoint;
         }
 
 
@@ -23,11 +25,22 @@ namespace InventoryService.Services
 
             if (reserved)
             {
-                this.publishEndpoint.Publish(new StockReserved() { CorrelationId = Guid.Parse(request.OrderId)});
+                _eventPublisher.AddEvent(new AppOutBox()
+                {
+                    Content = Newtonsoft.Json.JsonConvert.SerializeObject(new StockReserved() { CorrelationId = Guid.Parse(request.OrderId) }),
+                    Type = typeof(StockReserved).AssemblyQualifiedName,
+
+                });
+
             }
             else
             {
-                this.publishEndpoint.Publish(new StockReservationFailed() { CorrelationId = Guid.Parse(request.OrderId)});
+                _eventPublisher.AddEvent(new AppOutBox()
+                {
+                    Content = Newtonsoft.Json.JsonConvert.SerializeObject(new StockReservationFailed() { CorrelationId = Guid.Parse(request.OrderId) }),
+                    Type = typeof(StockReservationFailed).AssemblyQualifiedName,
+
+                });
             }
             return Task.FromResult(new InventoryCheckResponse());
         }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OMS.Domain.Orders.Repositories
+namespace OMS.Application.Services.Events
 {
-    public interface IOrderQueryRepository
+    public class BaseEvent
     {
-        Order GetById(Guid id);
+        public Guid CorrelationId { get; set; }
     }
 }

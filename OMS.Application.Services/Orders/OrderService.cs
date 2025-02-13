@@ -11,18 +11,26 @@ using OrderItem = OMS.Application.Services.Events.OrderItem;
 using OMS.Application.Services.Events;
 using OMS.Application.Contracts.Dtos;
 using OMS.Application.Contracts.Services;
+using OMS.Application.Services.EventPublisher;
+using Newtonsoft.Json;
 
 namespace OMS.Application.Services.Orders
 {
     public class OrderService : IOrderService
     {
         private readonly IConfiguration configuration;
+        
         private readonly string _PayServerAddress;
+        
         private readonly string _InventoryServerAddress;
+        
         private readonly IOrderCommandRepository _orderCommandRepository;
+        
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderService(IConfiguration configuration, IOrderCommandRepository orderCommandRepository, IPublishEndpoint publishEndpoint)
+        private readonly AppEventPublisher appEventPublisher;
+
+        public OrderService(IConfiguration configuration, IOrderCommandRepository orderCommandRepository, IPublishEndpoint publishEndpoint, AppEventPublisher appEventPublisher)
         {
             _PayServerAddress = configuration.GetSection("PayServer")?.Value ?? "";
 
@@ -31,6 +39,8 @@ namespace OMS.Application.Services.Orders
             _orderCommandRepository = orderCommandRepository;
 
             _publishEndpoint = publishEndpoint;
+
+            this.appEventPublisher = appEventPublisher;
         }
 
 
@@ -40,11 +50,17 @@ namespace OMS.Application.Services.Orders
 
             _orderCommandRepository.Add(order);
 
-            await _publishEndpoint.Publish(new CreateOrderMessage()
+            var message = new CreateOrderMessage()
             {
                 CorrelationId = order.Id,
                 OrderItemList = new List<OrderItem>(),
                 TotalPrice = order.TotalPrice,
+            };
+
+            appEventPublisher.AddEvent(new AppOutBox()
+            {
+                Content = JsonConvert.SerializeObject(message),
+                Type = message.GetType().AssemblyQualifiedName, 
             });
 
             CheckInventory(order.Id);
@@ -72,7 +88,7 @@ namespace OMS.Application.Services.Orders
             var client = new PaymentService.Proto.Pay.PayClient(channel);
 
             client.Pay(new PayRequest { OrderId = orderId.ToString() });
-          
+
         }
     }
 }

@@ -23,10 +23,19 @@ builder.Services.InitializeCommands();
 
 builder.Services.InitializeQueries();
 
-InitializeApp.InitMassTransit(builder.Services);
-InitializeApp.InitializeApplicationService(builder.Services);
+string OutBoxDbConstr = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
 
-builder.Services.InjectSqlServerEfCoreDependencies("Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True");
+string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True";
+
+builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
+
+InitializeApp.InitMassTransit(builder.Services);
+
+
+InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);
+
+
+builder.Services.InjectOutboxDb(OutBoxDbConstr);
 
 var app = builder.Build();
 

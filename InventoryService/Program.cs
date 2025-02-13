@@ -1,5 +1,8 @@
 using InventoryService.Services;
+using Microsoft.Data.SqlClient;
+using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Init;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,11 @@ builder.Services.AddGrpc();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<AppEventPublisher>();
 
+string OutboxConnectionString = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
+
+builder.Services.AddKeyedTransient<IDbConnection, SqlConnection>("OutBoxConnection", (ServiceProvider, cnt) => new SqlConnection(OutboxConnectionString));
 InitializeApp.InitMassTransit(builder.Services);
 
 var app = builder.Build();

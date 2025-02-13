@@ -10,22 +10,20 @@ using Microsoft.Extensions.Configuration;
 
 namespace OMS.Infrastructure.Persistance.EF.Design
 {
-    internal class DesignTimeOrderContextFactory : IDesignTimeDbContextFactory<OrderContext>
+    internal class DesignTimeOutBoxContextFactory : IDesignTimeDbContextFactory<OutboxDbContext>
     {
-        public OrderContext CreateDbContext(string[] args)
+        public OutboxDbContext CreateDbContext(string[] args)
         {
-            string MigrationConnectionString = "Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True";
+            string MigrationConnectionString = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
 
 
-            var builder = new DbContextOptionsBuilder<OrderContext>();
+            var builder = new DbContextOptionsBuilder<OutboxDbContext>();
             
 
             builder.UseSqlServer(MigrationConnectionString);
 
 
-            return new OrderContext(builder.Options);
+            return new OutboxDbContext(builder.Options);
         }
     }
-
-
 }

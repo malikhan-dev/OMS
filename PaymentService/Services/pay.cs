@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using MassTransit;
+using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Events;
 using PaymentService.Proto;
 
@@ -7,10 +8,11 @@ namespace PaymentService.Services
 {
     public class PaymentHandler : PaymentService.Proto.Pay.PayBase
     {
-        private readonly IPublishEndpoint _endpoint;
-        public PaymentHandler(IPublishEndpoint endpoint)
+        private readonly AppEventPublisher _eventPublisher;
+
+        public PaymentHandler(AppEventPublisher eventPublisher)
         {
-            _endpoint = endpoint;
+            _eventPublisher = eventPublisher;
         }
 
         public override Task<PayResponse> Pay(PayRequest request, ServerCallContext context)
@@ -20,11 +22,20 @@ namespace PaymentService.Services
 
             if (paid)
             {
-                this._endpoint.Publish(new SuccessfullyPaidEvent() {  CorrelationId = Guid.Parse(request.OrderId), OrderId = Guid.Parse( request.OrderId) });
+                _eventPublisher.AddEvent(new AppOutBox()
+                {
+                    Content = Newtonsoft.Json.JsonConvert.SerializeObject(new SuccessfullyPaidEvent() { CorrelationId = Guid.Parse(request.OrderId), OrderId = Guid.Parse(request.OrderId) }),
+                    Type = typeof(SuccessfullyPaidEvent).AssemblyQualifiedName,
+                });
             }
             else
             {
-                this._endpoint.Publish(new PaymentFailedEvent() { CorrelationId = Guid.Parse(request.OrderId), OrderId = Guid.Parse(request.OrderId) });
+                _eventPublisher.AddEvent(new AppOutBox()
+                {
+                    Content = Newtonsoft.Json.JsonConvert.SerializeObject(new PaymentFailedEvent() { CorrelationId = Guid.Parse(request.OrderId), OrderId = Guid.Parse(request.OrderId) }),
+                    Type = typeof(PaymentFailedEvent).AssemblyQualifiedName,
+                });
+              
             }
             return Task.FromResult(new PayResponse());
         }

@@ -20,7 +20,18 @@ namespace OMS.Infrastructure.Persistance.EF.Initializations
             {
                 cfg.UseSqlServer(connectionstring);
             });
+            services.AddScoped<IOrderQueryRepository, OrderQueryRepository>();
             services.AddScoped<IOrderCommandRepository, OrderRepository>();
+
+        }
+
+        public static void InjectOutboxDb(this IServiceCollection services, string connectionstring)
+        {
+            services.AddDbContext<OutboxDbContext>(cfg =>
+            {
+                cfg.UseSqlServer(connectionstring);
+            });
+           
 
         }
     }

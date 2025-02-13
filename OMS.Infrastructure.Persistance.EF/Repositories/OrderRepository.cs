@@ -18,5 +18,12 @@ namespace OMS.Infrastructure.Persistance.EF.Repositories
             _context.SaveChanges();
             return order.Id;
         }
+
+        public void Update(Order order)
+        {
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+            
+        }
     }
 }

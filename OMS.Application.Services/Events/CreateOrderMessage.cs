@@ -9,4 +9,6 @@ namespace OMS.Application.Services.Events
         public List<OrderItem> OrderItemList { get; set; }
 
     }
+
+    
 }

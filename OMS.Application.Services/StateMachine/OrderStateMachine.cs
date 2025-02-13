@@ -50,24 +50,30 @@ namespace OMS.Application.Services.StateMachine
             During(OrderCreated,
               When(SuccessfullyPaidEvent)
                   .TransitionTo(OrderPaid)
-                  );
+                  .Activity(c=>c.OfType<OrderPaidActivity>()));
 
 
             During(StockReserved,
                 When(SuccessfullyPaidEvent)
                    .TransitionTo(OrderCompleted)
+                   .Activity(c=>c.OfType<OrderCompletedActivity>())
                    );
 
             During(OrderPaid,
                 When(StockReservedEvent)
                 .TransitionTo(OrderCompleted)
+                .Activity(c => c.OfType<OrderCompletedActivity>())
+
             );
 
             DuringAny(When(StockReservationFailedEvent)
-                        .TransitionTo(OrderFailed));
+                        .TransitionTo(OrderFailed)
+                                .Activity(c => c.OfType<OrderFailedActivity>()));
+
 
             DuringAny(When(PaymentFailedEvent)
-                      .TransitionTo(OrderFailed));
+                      .TransitionTo(OrderFailed)
+                                .Activity(c => c.OfType<OrderFailedActivity>()));
 
         }
 

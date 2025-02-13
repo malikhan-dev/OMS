@@ -10,11 +10,12 @@ namespace OMS.Application.Services.StateMachine.Activities
         {
         }
 
-        public Task Execute(BehaviorContext<OrderStateInstance, CreateOrderMessage> context, Behavior<OrderStateInstance, CreateOrderMessage> next)
+        public async Task Execute(BehaviorContext<OrderStateInstance, CreateOrderMessage> context, Behavior<OrderStateInstance, CreateOrderMessage> next)
         {
             //Event Source Order Creation
 
-            return Task.CompletedTask;
+            await next.Execute(context).ConfigureAwait(false);
+
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, CreateOrderMessage, TException> context, Behavior<OrderStateInstance, CreateOrderMessage> next) where TException : Exception
