@@ -29,7 +29,7 @@ namespace DummyTest.Controllers
         {
             await _endpoint.Publish(new CreateOrderMessage()
             {
-                OrderId = 10,
+                CorrelationId = Guid.NewGuid(),
                 TotalPrice = 2,
             });
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

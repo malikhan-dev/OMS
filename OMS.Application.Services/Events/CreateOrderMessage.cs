@@ -1,11 +1,12 @@
-﻿namespace OMS.Application.Services.Events
+﻿using MassTransit;
+
+namespace OMS.Application.Services.Events
 {
-    public class CreateOrderMessage : ICreateOrderMessage
+    public class CreateOrderMessage :   CorrelatedBy<Guid>
     {
-        public int OrderId { get; set; }
-        public string CustomerId { get; set; }
-        public string PaymentAccountId { get; set; }
+        public Guid CorrelationId { get; set; }
         public double TotalPrice { get; set; }
         public List<OrderItem> OrderItemList { get; set; }
+
     }
 }

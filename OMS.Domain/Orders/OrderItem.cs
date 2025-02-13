@@ -13,6 +13,6 @@ namespace OMS.Domain.Orders
         public int Count { get;  set; }
         public double UnitPrice { get;  set; }
         public Order Order { get; set; }
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
     }
 }

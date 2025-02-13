@@ -2,6 +2,6 @@
 {
     public interface IOrderCommandRepository
     {
-        int Add(Order order);
+        Guid Add(Order order);
     }
 }

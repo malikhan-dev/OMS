@@ -13,7 +13,7 @@ service Pay {
 }
 
 message PayRequest {
-	  int32 orderId = 1;
+	  string orderId = 1;
 }
 
 

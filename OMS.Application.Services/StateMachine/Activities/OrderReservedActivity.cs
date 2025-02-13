@@ -13,7 +13,7 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         public Task Execute(BehaviorContext<OrderStateInstance, StockReserved> context, Behavior<OrderStateInstance, StockReserved> next)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, StockReserved, TException> context, Behavior<OrderStateInstance, StockReserved> next) where TException : Exception

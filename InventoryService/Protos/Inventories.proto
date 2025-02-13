@@ -13,7 +13,7 @@ service Inventory {
 }
 
 message InventoryCheckRequest {
-	  int32 orderId = 1;
+	  string orderId = 1;
 }
 
 

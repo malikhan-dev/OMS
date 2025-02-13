@@ -42,38 +42,36 @@ namespace OMS.Application.Services.Orders
 
             await _publishEndpoint.Publish(new CreateOrderMessage()
             {
-                CustomerId = "1",
-                OrderId = order.Id,
+                CorrelationId = order.Id,
                 OrderItemList = new List<OrderItem>(),
-                PaymentAccountId = "2",
                 TotalPrice = order.TotalPrice,
             });
 
-            //CheckInventory(order.Id);
-            
-            //CheckPayment(order.Id);
-            
+            CheckInventory(order.Id);
+
+            CheckPayment(order.Id);
+
             return true;
         }
 
-        private void CheckInventory(int orderId)
+        private void CheckInventory(Guid orderId)
         {
 
             using var channel = GrpcChannel.ForAddress(_InventoryServerAddress);
 
             var client = new InventoryService.Proto.Inventory.InventoryClient(channel);
 
-            client.CheckInventory(new InventoryCheckRequest { OrderId = orderId });
+            client.CheckInventory(new InventoryCheckRequest { OrderId = orderId.ToString() });
 
         }
 
-        private void CheckPayment(double Amount)
+        private void CheckPayment(Guid orderId)
         {
             using var channel = GrpcChannel.ForAddress(_PayServerAddress);
 
             var client = new PaymentService.Proto.Pay.PayClient(channel);
 
-            client.Pay(new PayRequest { OrderId = 200 });
+            client.Pay(new PayRequest { OrderId = orderId.ToString() });
           
         }
     }

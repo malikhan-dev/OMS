@@ -13,7 +13,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 InitializeApp.InitMassTransit(builder.Services);
-InitializeApp.InitializeApplicationService(builder.Services);
 
 var app = builder.Build();
 

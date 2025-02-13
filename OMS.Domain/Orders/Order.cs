@@ -3,7 +3,7 @@ using OMS.Domain.Orders.ValueObjects;
 
 namespace OMS.Domain.Orders
 {
-    public class Order : AggregateRoot<int>
+    public class Order : AggregateRoot<Guid>
     {
         public string Description { get; private set; } = string.Empty;
         public double TotalPrice { get; private set; }

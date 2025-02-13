@@ -13,7 +13,7 @@ namespace OMS.Application.Services.StateMachine
         public string CorrelationString { get; set; }
         public Guid CorrelationId { get; set; }
         public string CurrentState { get; set; }
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
         public double TotalPrice { get; set; }
         public DateTime CreatedDate { get; set; }
         public int Version { get; set; }

@@ -26,13 +26,13 @@ namespace OMS.Application.Services.StateMachine
         {
             InstanceState(x => x.CurrentState);
 
-            Event(() => CreateOrderMessage, y => y.CorrelateBy<int>(x => x.OrderId, z => z.Message.OrderId).SelectId(context => Guid.NewGuid()));
+            //Event(() => CreateOrderMessage, y => y.CorrelateBy<int>(x => x.OrderId, z => z.Message.OrderId).SelectId(context => context));
 
             Initially(
               When(CreateOrderMessage)
              .Then(context =>
              {
-                 context.Instance.OrderId = context.Data.OrderId;
+                 context.Instance.OrderId = context.Data.CorrelationId;
                  context.Instance.CreatedDate = DateTime.UtcNow;
                  context.Instance.TotalPrice = context.Data.TotalPrice;
                  context.Instance.CorrelationString = context.Instance.CorrelationId.ToString();

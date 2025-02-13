@@ -20,11 +20,11 @@ namespace PaymentService.Services
 
             if (paid)
             {
-                this._endpoint.Publish(new SuccessfullyPaidEvent() { CorrelationId = request.OrderId });
+                this._endpoint.Publish(new SuccessfullyPaidEvent() {  CorrelationId = Guid.Parse(request.OrderId), OrderId = Guid.Parse( request.OrderId) });
             }
             else
             {
-                this._endpoint.Publish(new PaymentFailedEvent() { CorrelationId = request.OrderId });
+                this._endpoint.Publish(new PaymentFailedEvent() { CorrelationId = Guid.Parse(request.OrderId), OrderId = Guid.Parse(request.OrderId) });
             }
             return Task.FromResult(new PayResponse());
         }

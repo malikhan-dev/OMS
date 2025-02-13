@@ -17,18 +17,17 @@ namespace InventoryService.Services
 
         public override Task<InventoryCheckResponse> CheckInventory(InventoryCheckRequest request, ServerCallContext context)
         {
-            Thread.Sleep(20000);
-            //dummy Tasks
+        
 
             var reserved = Random.Shared.NextDouble() > 0.5;
 
             if (reserved)
             {
-                this.publishEndpoint.Publish(new StockReserved() { CorrelationId = Guid.NewGuid()});
+                this.publishEndpoint.Publish(new StockReserved() { CorrelationId = Guid.Parse(request.OrderId)});
             }
             else
             {
-                this.publishEndpoint.Publish(new StockReservationFailed() { CorrelationId = Guid.NewGuid()});
+                this.publishEndpoint.Publish(new StockReservationFailed() { CorrelationId = Guid.Parse(request.OrderId)});
             }
             return Task.FromResult(new InventoryCheckResponse());
         }
