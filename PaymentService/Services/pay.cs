@@ -1,22 +1,32 @@
 ﻿using Grpc.Core;
+using MassTransit;
+using OMS.Application.Services.Events;
 using PaymentService.Proto;
 
 namespace PaymentService.Services
 {
     public class PaymentHandler : PaymentService.Proto.Pay.PayBase
     {
-        public PaymentHandler()
+        private readonly IPublishEndpoint _endpoint;
+        public PaymentHandler(IPublishEndpoint endpoint)
         {
-            
+            _endpoint = endpoint;
         }
 
         public override Task<PayResponse> Pay(PayRequest request, ServerCallContext context)
         {
-            return Task.FromResult( new PayResponse()
+
+            var paid = Random.Shared.NextDouble() > 0.5;
+
+            if (paid)
             {
-                Suceeded = true,
-                Message = "paid"
-            });
+                this._endpoint.Publish(new SuccessfullyPaidEvent() { CorrelationId = request.OrderId });
+            }
+            else
+            {
+                this._endpoint.Publish(new PaymentFailedEvent() { CorrelationId = request.OrderId });
+            }
+            return Task.FromResult(new PayResponse());
         }
 
     }

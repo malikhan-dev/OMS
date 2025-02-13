@@ -23,6 +23,7 @@ builder.Services.InitializeCommands();
 
 builder.Services.InitializeQueries();
 
+InitializeApp.InitMassTransit(builder.Services);
 InitializeApp.InitializeApplicationService(builder.Services);
 
 builder.Services.InjectSqlServerEfCoreDependencies("Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True");

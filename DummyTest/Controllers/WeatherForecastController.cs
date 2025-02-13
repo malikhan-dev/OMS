@@ -29,10 +29,7 @@ namespace DummyTest.Controllers
         {
             await _endpoint.Publish(new CreateOrderMessage()
             {
-                CustomerId = "1",
-                OrderId = 0,
-                
-                PaymentAccountId = "2",
+                OrderId = 10,
                 TotalPrice = 2,
             });
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

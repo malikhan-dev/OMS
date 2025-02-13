@@ -23,4 +23,8 @@
 
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OMS.Application.Services\OMS.Application.Services.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,17 +1,36 @@
 ﻿using Grpc.Core;
 using InventoryService.Proto;
+using MassTransit;
+using OMS.Application.Services.Events;
 
 namespace InventoryService.Services
 {
     public class InventoryHandler : InventoryService.Proto.Inventory.InventoryBase
     {
+        private readonly IPublishEndpoint publishEndpoint;
+
+        public InventoryHandler(IPublishEndpoint publishEndpoint)
+        {
+            this.publishEndpoint = publishEndpoint;
+        }
+
+
         public override Task<InventoryCheckResponse> CheckInventory(InventoryCheckRequest request, ServerCallContext context)
         {
-            return Task.FromResult(new InventoryCheckResponse()
+            Thread.Sleep(20000);
+            //dummy Tasks
+
+            var reserved = Random.Shared.NextDouble() > 0.5;
+
+            if (reserved)
             {
-                Suceeded = true,
-                Message = "Ok"
-            });
+                this.publishEndpoint.Publish(new StockReserved() { CorrelationId = Guid.NewGuid()});
+            }
+            else
+            {
+                this.publishEndpoint.Publish(new StockReservationFailed() { CorrelationId = Guid.NewGuid()});
+            }
+            return Task.FromResult(new InventoryCheckResponse());
         }
     }
 }

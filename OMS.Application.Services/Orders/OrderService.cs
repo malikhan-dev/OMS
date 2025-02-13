@@ -73,7 +73,7 @@ namespace OMS.Application.Services.Orders
 
             var client = new PaymentService.Proto.Pay.PayClient(channel);
 
-            client.Pay(new PayRequest { Price = 200 });
+            client.Pay(new PayRequest { OrderId = 200 });
           
         }
     }

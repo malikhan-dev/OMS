@@ -15,10 +15,16 @@ namespace OMS.Application.Services.Init
     {
         public static void InitializeApplicationService(this IServiceCollection Services)
         {
+           
+
+            Services.AddScoped<IOrderService, OrderService>();
+        }
+
+        public static void InitMassTransit(this IServiceCollection Services)
+        {
             Services.AddMassTransit(cfg =>
             {
                 cfg.SetSnakeCaseEndpointNameFormatter();
-                //cfg.AddConsumer<testconsumer>();
                 cfg.AddSagaStateMachine<OrderStateMachine, OrderStateInstance>().MongoDbRepository(r =>
                 {
                     r.Connection = "mongodb://127.0.0.1:27017";
@@ -41,8 +47,6 @@ namespace OMS.Application.Services.Init
                 });
             });
             Services.AddMassTransitHostedService();
-
-            Services.AddScoped<IOrderService, OrderService>();
         }
     }
 }

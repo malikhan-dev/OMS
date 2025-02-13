@@ -13,11 +13,10 @@ service Pay {
 }
 
 message PayRequest {
-	  int32 price = 1;
+	  int32 orderId = 1;
 }
 
 
 message PayResponse {
-	string message = 1;
-	bool suceeded = 2; 
+
 }

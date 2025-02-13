@@ -1,4 +1,5 @@
 using InventoryService.Services;
+using OMS.Application.Services.Init;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddGrpc();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+InitializeApp.InitMassTransit(builder.Services);
+InitializeApp.InitializeApplicationService(builder.Services);
 
 var app = builder.Build();
 

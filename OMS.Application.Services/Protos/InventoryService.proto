@@ -18,6 +18,5 @@ message InventoryCheckRequest {
 
 
 message InventoryCheckResponse {
-	string message = 1;
-	bool suceeded = 2; 
+
 }
