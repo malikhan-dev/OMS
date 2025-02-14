@@ -15,9 +15,10 @@ namespace OMS.Controllers
             this.mediator = mediator;
         }
         [HttpPost(Name = "NewOrder")]
-        public async void NewOrder([FromBody] NewOrderDto dto)
+        public async Task<IActionResult> NewOrder([FromBody] NewOrderDto dto)
         {
             await mediator.Send(new CreateOrderCommand(dto));
+            return Ok();
         }
     }
 }

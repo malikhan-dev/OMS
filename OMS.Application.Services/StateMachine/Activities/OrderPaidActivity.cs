@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OMS.Application.Services.StateMachine.Activities
 {
-    internal class OrderPaidActivity : Activity<OrderStateInstance>
+    internal class OrderPaidActivity : Activity<OrderStateInstance, SuccessfullyPaidEvent>
     {
         private readonly IServiceProvider _ServiceProvider;
         private readonly IOrderCommandRepository _orderCommandRepository;
@@ -23,12 +23,11 @@ namespace OMS.Application.Services.StateMachine.Activities
         }
         public void Accept(StateMachineVisitor visitor)
         {
-            throw new NotImplementedException();
+            visitor.Visit(this);
         }
-        public async Task Execute(BehaviorContext<OrderStateInstance> context, Behavior<OrderStateInstance> next)
+
+        public async Task Execute(BehaviorContext<OrderStateInstance, SuccessfullyPaidEvent> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next)
         {
-
-
             var model = _orderQueryRepository.GetById(context.Instance.CorrelationId);
 
             model.Paid();
@@ -36,41 +35,12 @@ namespace OMS.Application.Services.StateMachine.Activities
             _orderCommandRepository.Update(model);
 
             await next.Execute(context).ConfigureAwait(false);
-
-
-
-        }
-
-        public async Task Execute<T>(BehaviorContext<OrderStateInstance, T> context, Behavior<OrderStateInstance, T> next)
-        {
-
-            var model = _orderQueryRepository.GetById(context.Instance.CorrelationId);
-
-            model.Paid();
-
-            _orderCommandRepository.Update(model);
-
-            await next.Execute(context).ConfigureAwait(false);
-
-
-
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, SuccessfullyPaidEvent, TException> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next) where TException : Exception
         {
             return next.Faulted(context);
         }
-
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, TException> context, Behavior<OrderStateInstance> next) where TException : Exception
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Faulted<T, TException>(BehaviorExceptionContext<OrderStateInstance, T, TException> context, Behavior<OrderStateInstance, T> next) where TException : Exception
-        {
-            throw new NotImplementedException();
-        }
-
         public void Probe(ProbeContext context)
         {
             context.CreateScope("publish-order-closed");

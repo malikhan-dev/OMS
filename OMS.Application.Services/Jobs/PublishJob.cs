@@ -33,30 +33,25 @@ namespace OMS.Application.Services.Jobs
 
                 connection.Open();
 
-                var result = connection.Query<AppOutBox>("SELECT TOP (100) [Id] ,[Content],[Type] ,[Published] ,[RetryCount] FROM [dbo].[OutBoxes] where Published = 0 and RetryCount < 20 order by id asc");
+                var result = connection.QuerySingle<AppOutBox>("SELECT TOP (1) [Id] ,[Content],[Type] ,[Published] ,[RetryCount] FROM [dbo].[OutBoxes] where Published = 0 and RetryCount < 20 order by id asc");
 
-
-                foreach (var item in result)
+                try
                 {
-                    try
-                    {
-                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject(item.Content, Type.GetType(item.Type));
+                    var res = Newtonsoft.Json.JsonConvert.DeserializeObject(result.Content, Type.GetType(result.Type));
 
-                        await eventPublisher.Publish(res);
+                    await eventPublisher.Publish(res);
 
-                        var command = connection.Execute("update dbo.OutBoxes set RetryCount = RetryCount + 1, Published = 1 where id = @id", new { @id = item.Id });
+                    var command = connection.Execute("update dbo.OutBoxes set RetryCount = RetryCount + 1, Published = 1 where id = @id", new { @id = result.Id });
 
-                        Thread.Sleep(20000);
+                    Task.Delay(20000).Wait();
 
-                    }
-                    catch
-                    {
-                        var command = connection.Execute("update dbo.OutBoxes set RetryCount = RetryCount +1 where id = @id", new { @id = item.Id });
-
-                    }
                 }
-                connection.Close();
+                catch
+                {
+                    var command = connection.Execute("update dbo.OutBoxes set RetryCount = RetryCount +1 where id = @id", new { @id = result.Id });
+                }
 
+                connection.Close();
 
             }
         }

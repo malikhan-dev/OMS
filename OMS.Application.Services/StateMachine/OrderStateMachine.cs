@@ -26,7 +26,6 @@ namespace OMS.Application.Services.StateMachine
         {
             InstanceState(x => x.CurrentState);
 
-
             Event(() => CreateOrderMessage, y => y.CorrelateBy<Guid>(x => x.OrderId, z => z.Message.CorrelationId).SelectId(context => context.CorrelationId.Value));
 
             Initially(
@@ -43,21 +42,20 @@ namespace OMS.Application.Services.StateMachine
 
             During(OrderCreated,
                 When(StockReservedEvent)
-                .Activity(c => c.OfInstanceType<OrderReservedActivity>())
+                .Activity(c => c.OfType<OrderReservedActivity>())
                 .TransitionTo(StockReserved));
 
 
             During(OrderCreated,
               When(SuccessfullyPaidEvent)
-                                .Activity(c => c.OfInstanceType<OrderPaidActivity>())
-                                .TransitionTo(OrderPaid));
+                .Activity(c => c.OfType<OrderPaidActivity>())
+                .TransitionTo(OrderPaid));
 
 
             During(StockReserved,
                 When(SuccessfullyPaidEvent)
-                                   .Activity(c => c.OfType<OrderCompletedActivity>())
-                                   .TransitionTo(OrderCompleted)
-                   );
+                    .Activity(c => c.OfType<OrderCompletedActivity>())
+                    .TransitionTo(OrderCompleted));
 
             During(OrderPaid,
                 When(StockReservedEvent)

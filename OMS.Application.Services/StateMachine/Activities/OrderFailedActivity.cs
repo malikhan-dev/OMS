@@ -20,11 +20,10 @@ namespace OMS.Application.Services.StateMachine.Activities
         }
 
  
-        public async  Task Execute(BehaviorContext<OrderStateInstance, StockReservationFailed> context, Behavior<OrderStateInstance, StockReservationFailed> next)
+        public async Task Execute(BehaviorContext<OrderStateInstance, StockReservationFailed> context, Behavior<OrderStateInstance, StockReservationFailed> next)
         {
             await Failed(context.Data.CorrelationId);
-            await next.Execute(context).ConfigureAwait(false);
-
+            //await next.Execute(context).ConfigureAwait(false);
         }
 
         private Task Failed(Guid OrderId)
@@ -66,7 +65,7 @@ namespace OMS.Application.Services.StateMachine.Activities
         public async Task Execute(BehaviorContext<OrderStateInstance, PaymentFailedEvent> context, Behavior<OrderStateInstance, PaymentFailedEvent> next)
         {
             await Failed(context.Data.CorrelationId);
-            await next.Execute(context).ConfigureAwait(false);
+            //await next.Execute(context).ConfigureAwait(false);
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, PaymentFailedEvent, TException> context, Behavior<OrderStateInstance, PaymentFailedEvent> next) where TException : Exception

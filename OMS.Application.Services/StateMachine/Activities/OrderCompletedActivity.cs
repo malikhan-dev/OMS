@@ -1,13 +1,7 @@
 ﻿using Automatonymous;
 using GreenPipes;
-using Microsoft.Extensions.DependencyInjection;
 using OMS.Application.Services.Events;
 using OMS.Domain.Orders.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OMS.Application.Services.StateMachine.Activities
 {
@@ -17,48 +11,34 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         private readonly IOrderCommandRepository _orderCommandRepository;
 
-        private readonly IServiceProvider _serviceProvider;
-        public OrderCompletedActivity(IServiceProvider serviceProvider)
+        public OrderCompletedActivity(IOrderQueryRepository orderQueryRepository, IOrderCommandRepository orderCommandRepository)
         {
-            _serviceProvider = serviceProvider;
+            _orderQueryRepository = orderQueryRepository;
+            _orderCommandRepository = orderCommandRepository;
         }
 
         public async Task Execute(BehaviorContext<OrderStateInstance, StockReserved> context, Behavior<OrderStateInstance, StockReserved> next)
         {
-           
+
             CompleteOrder(context.Data.CorrelationId);
 
-            await next.Execute(context).ConfigureAwait(false);
+            //await next.Execute(context).ConfigureAwait(false);
         }
 
         private void CompleteOrder(Guid orderId)
         {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _orderCommandRepository =
-                    scope.ServiceProvider
-                        .GetRequiredService<IOrderCommandRepository>();
+            var model = _orderQueryRepository.GetById(orderId);
 
+            model.Completed();
 
-                var _orderQueryRepository = scope.ServiceProvider
-                        .GetRequiredService<IOrderQueryRepository>();
-
-                var model = _orderQueryRepository.GetById(orderId);
-
-                model.Completed();
-
-                _orderCommandRepository.Update(model);
-
-
-            }
-               
+            _orderCommandRepository.Update(model);
         }
 
         public async Task Execute(BehaviorContext<OrderStateInstance, SuccessfullyPaidEvent> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next)
         {
-             CompleteOrder(context.Data.OrderId);
+            CompleteOrder(context.Data.OrderId);
 
-             await next.Execute(context).ConfigureAwait(false);
+            //await next.Execute(context).ConfigureAwait(false);
 
         }
 

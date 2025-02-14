@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\OMS.Application.Contracts\OMS.Application.Contracts.csproj" />
     <ProjectReference Include="..\OMS.Domain\OMS.Domain.csproj" />
   </ItemGroup>

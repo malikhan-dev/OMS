@@ -8,14 +8,12 @@ namespace OMS.Application.Services.StateMachine.Activities
     {
         public void Accept(StateMachineVisitor visitor)
         {
+            visitor.Visit(this);
         }
 
         public async Task Execute(BehaviorContext<OrderStateInstance, CreateOrderMessage> context, Behavior<OrderStateInstance, CreateOrderMessage> next)
         {
-            //Event Source Order Creation
-
             await next.Execute(context).ConfigureAwait(false);
-
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, CreateOrderMessage, TException> context, Behavior<OrderStateInstance, CreateOrderMessage> next) where TException : Exception
@@ -27,9 +25,6 @@ namespace OMS.Application.Services.StateMachine.Activities
         {
             context.CreateScope("publish-order-closed");
         }
-
-      
-
      
     }
 
