@@ -7,6 +7,7 @@ using OMS.Infrastructure.Persistance.EF.Repositories;
 using OMS.Infrastructure.Persistance.EF.Context;
 using OMS.Infrastructure.Persistance.EF.Initializations;
 using OMS.Application.Services.Init;
+using OMS.Application.Services.StateMachine;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -29,7 +30,7 @@ string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integr
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
-InitializeApp.InitMassTransit(builder.Services);
+OMS.Infrastructure.Messaging.Masstransit.Init.Initialization.InitMasstransit<OrderStateMachine,OrderStateInstance>(builder.Services);
 
 
 InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);

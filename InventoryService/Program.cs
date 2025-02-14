@@ -1,3 +1,4 @@
+using InventoryService.Services;
 using Microsoft.Data.SqlClient;
 using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Init;
@@ -22,7 +23,7 @@ string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integr
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
-InitializeApp.InitMassTransit(builder.Services);
+OMS.Infrastructure.Messaging.Masstransit.Init.Initialization.InitMasstransit(builder.Services);
 
 
 InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);
@@ -38,6 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.MapGrpcService<InventoryHandler>();
 
 app.UseHttpsRedirection();
 

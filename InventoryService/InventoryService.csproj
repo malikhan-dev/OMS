@@ -21,10 +21,10 @@
 
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\OMS.Application.Services\OMS.Application.Services.csproj" />
+	  <ProjectReference Include="..\OMS.Infrastructure.Messaging.Masstransit\OMS.Infrastructure.Messaging.Masstransit.csproj" />
 	  <ProjectReference Include="..\OMS.Infrastructure.Persistance.EF\OMS.Infrastructure.Persistance.EF.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Protobuf Include="Protos\Inventories.proto" GrpcServices="Server" />
+		<Protobuf Include="Protos\InventoryService.proto" GrpcServices="Server" />
 	</ItemGroup>
 </Project>

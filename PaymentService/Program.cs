@@ -26,8 +26,8 @@ string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integr
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
-InitializeApp.InitMassTransit(builder.Services);
-
+//InitializeApp.InitMassTransit(builder.Services);
+OMS.Infrastructure.Messaging.Masstransit.Init.Initialization.InitMasstransit(builder.Services);
 
 InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);
 
