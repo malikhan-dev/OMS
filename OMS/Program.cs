@@ -23,9 +23,9 @@ builder.Services.InitializeCommands();
 
 builder.Services.InitializeQueries();
 
-string OutBoxDbConstr = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
+string OutBoxDbConstr = builder.Configuration.GetSection("OutBoxDb").Value;
 
-string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True";
+string AppConnectionStr = builder.Configuration.GetSection("AppConstr").Value;
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 

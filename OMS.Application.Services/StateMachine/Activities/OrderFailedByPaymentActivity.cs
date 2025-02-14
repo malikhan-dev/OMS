@@ -1,6 +1,7 @@
 ﻿using Automatonymous;
 using GreenPipes;
 using OMS.Application.Services.Events;
+using OMS.Application.Services.Events.Services;
 using OMS.Domain.Orders.Repositories;
 
 namespace OMS.Application.Services.StateMachine.Activities
@@ -12,11 +13,16 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         private IOrderCommandRepository _orderRepository;
 
-        public OrderFailedByPaymentActivity(IOrderCommandRepository orderRepository, IOrderQueryRepository orderQueryRepository)
+        private readonly EventStorage eventStoreService;
+
+
+        public OrderFailedByPaymentActivity(IOrderCommandRepository orderRepository, IOrderQueryRepository orderQueryRepository, EventStorage eventStoreService)
         {
             _orderRepository = orderRepository;
 
             _orderQueryRepository = orderQueryRepository;
+
+            this.eventStoreService = eventStoreService;
         }
 
         public void Accept(StateMachineVisitor visitor)
@@ -26,7 +32,10 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         public async Task Execute(BehaviorContext<OrderStateInstance, PaymentFailedEvent> context, Behavior<OrderStateInstance, PaymentFailedEvent> next)
         {
+            await eventStoreService.AppendEvents($"Order:{context.Data.CorrelationId} Failed",nameof(OrderFailedByPaymentActivity));
+
             await Failed(context.Data.CorrelationId);
+
             await next.Execute(context).ConfigureAwait(false);
         }
 

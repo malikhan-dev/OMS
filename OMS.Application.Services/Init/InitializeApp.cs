@@ -8,6 +8,7 @@ using Hangfire;
 using Hangfire.MemoryStorage;
 using OMS.Application.Services.StateMachine.Activities;
 using Microsoft.Extensions.DependencyInjection;
+using OMS.Application.Services.Events.Services;
 namespace OMS.Application.Services.Init
 {
     public static class InitializeApp
@@ -25,6 +26,9 @@ namespace OMS.Application.Services.Init
             Services.AddScoped<OrderCompletedActivity>();
 
             Services.AddScoped<IOrderService, OrderService>();
+
+            Services.AddScoped<EventStorage>();
+            
         }
 
         public static void InitializeJobs(this Microsoft.Extensions.DependencyInjection.IServiceCollection Services)

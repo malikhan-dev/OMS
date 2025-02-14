@@ -17,6 +17,8 @@
     <ProjectReference Include="..\OMS.Application.Services\OMS.Application.Services.csproj" />
     <ProjectReference Include="..\OMS.Infrastructure.Messaging.Masstransit\OMS.Infrastructure.Messaging.Masstransit.csproj" />
     <ProjectReference Include="..\OMS.Infrastructure.Persistance.EF\OMS.Infrastructure.Persistance.EF.csproj" />
+  <PackageReference Include="EventStore.Client.Grpc.Streams" Version="22.0.0" />
+
   </ItemGroup>
 
 </Project>

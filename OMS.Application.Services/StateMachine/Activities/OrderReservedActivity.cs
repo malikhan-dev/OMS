@@ -1,8 +1,7 @@
 ﻿using Automatonymous;
 using GreenPipes;
-using Microsoft.Extensions.DependencyInjection;
 using OMS.Application.Services.Events;
-using OMS.Application.Services.Jobs;
+using OMS.Application.Services.Events.Services;
 using OMS.Domain.Orders.Repositories;
 
 namespace OMS.Application.Services.StateMachine.Activities
@@ -12,10 +11,13 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         private readonly IOrderCommandRepository _orderCommandRepository;
         private readonly IOrderQueryRepository _orderQueryRepository;
-        public OrderReservedActivity(IOrderCommandRepository orderCommandRepository, IOrderQueryRepository orderQueryRepository)
+        private readonly EventStorage eventStoreService;
+
+        public OrderReservedActivity(IOrderCommandRepository orderCommandRepository, IOrderQueryRepository orderQueryRepository, EventStorage eventStoreService)
         {
             _orderCommandRepository = orderCommandRepository;
             _orderQueryRepository = orderQueryRepository;
+            this.eventStoreService = eventStoreService;
         }
 
         public void Accept(StateMachineVisitor visitor)
@@ -25,6 +27,9 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         public async Task Execute(BehaviorContext<OrderStateInstance, StockReserved> context, Behavior<OrderStateInstance, StockReserved> next)
         {
+            await eventStoreService.AppendEvents($"Order:{context.Data.CorrelationId} Paid", nameof(OrderReservedActivity));
+
+
             var model = _orderQueryRepository.GetById(context.Data.CorrelationId);
 
             model.Reserved();

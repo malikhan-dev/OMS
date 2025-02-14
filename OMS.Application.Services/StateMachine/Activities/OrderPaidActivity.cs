@@ -1,13 +1,8 @@
 ﻿using Automatonymous;
 using GreenPipes;
-using Microsoft.Extensions.DependencyInjection;
 using OMS.Application.Services.Events;
+using OMS.Application.Services.Events.Services;
 using OMS.Domain.Orders.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OMS.Application.Services.StateMachine.Activities
 {
@@ -15,10 +10,13 @@ namespace OMS.Application.Services.StateMachine.Activities
     {
         private readonly IOrderCommandRepository _orderCommandRepository;
         private readonly IOrderQueryRepository _orderQueryRepository;
-        public OrderPaidActivity(IOrderCommandRepository orderCommandRepository, IOrderQueryRepository orderQueryRepository)
+        private readonly EventStorage eventStoreService;
+
+        public OrderPaidActivity(IOrderCommandRepository orderCommandRepository, IOrderQueryRepository orderQueryRepository, EventStorage eventStoreService)
         {
             _orderCommandRepository = orderCommandRepository;
             _orderQueryRepository = orderQueryRepository;
+            this.eventStoreService = eventStoreService;
         }
         public void Accept(StateMachineVisitor visitor)
         {
@@ -27,6 +25,10 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         public async Task Execute(BehaviorContext<OrderStateInstance, SuccessfullyPaidEvent> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next)
         {
+
+            await eventStoreService.AppendEvents($"Order:{context.Data.CorrelationId} Paid", nameof(OrderPaidActivity));
+
+
             var model = _orderQueryRepository.GetById(context.Instance.CorrelationId);
 
             model.Paid();

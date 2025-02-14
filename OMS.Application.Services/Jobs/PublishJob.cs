@@ -26,7 +26,7 @@ namespace OMS.Application.Services.Jobs
                 {
                     connection.Open();
 
-                    var result = connection.Query<AppOutBox>("SELECT TOP (50) [Id] ,[Content],[Type] ,[Published] ,[RetryCount] FROM [dbo].[OutBoxes] where Published = 0 and RetryCount < 20 order by id asc");
+                    var result = connection.Query<AppOutBox>("SELECT TOP (10) [Id] ,[Content],[Type] ,[Published] ,[RetryCount] FROM [dbo].[OutBoxes] where Published = 0 and RetryCount < 20 order by id asc");
 
                     if (result != null)
                     {

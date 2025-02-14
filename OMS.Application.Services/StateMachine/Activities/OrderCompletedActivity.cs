@@ -1,6 +1,7 @@
 ﻿using Automatonymous;
 using GreenPipes;
 using OMS.Application.Services.Events;
+using OMS.Application.Services.Events.Services;
 using OMS.Domain.Orders.Repositories;
 
 namespace OMS.Application.Services.StateMachine.Activities
@@ -11,14 +12,18 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         private readonly IOrderCommandRepository _orderCommandRepository;
 
-        public OrderCompletedActivity(IOrderQueryRepository orderQueryRepository, IOrderCommandRepository orderCommandRepository)
+        private readonly EventStorage eventStoreService;
+
+        public OrderCompletedActivity(IOrderQueryRepository orderQueryRepository, IOrderCommandRepository orderCommandRepository, EventStorage eventStoreService)
         {
             _orderQueryRepository = orderQueryRepository;
             _orderCommandRepository = orderCommandRepository;
+            this.eventStoreService = eventStoreService;
         }
 
         public async Task Execute(BehaviorContext<OrderStateInstance, StockReserved> context, Behavior<OrderStateInstance, StockReserved> next)
         {
+            await eventStoreService.AppendEvents($"Order:{context.Data.CorrelationId} Completed", nameof(OrderCompletedActivity));
 
             CompleteOrder(context.Data.CorrelationId);
 
@@ -36,6 +41,8 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         public async Task Execute(BehaviorContext<OrderStateInstance, SuccessfullyPaidEvent> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next)
         {
+            await eventStoreService.AppendEvents($"Order:{context.Data.CorrelationId} Completed", nameof(OrderCompletedActivity));
+
             CompleteOrder(context.Data.OrderId);
 
             await next.Execute(context).ConfigureAwait(false);
