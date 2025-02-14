@@ -28,9 +28,6 @@
 		<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
 	</ItemGroup>
   <ItemGroup>
-    <Folder Include="StateMachine\Models\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\OMS.Application.Contracts\OMS.Application.Contracts.csproj" />
     <ProjectReference Include="..\OMS.Domain\OMS.Domain.csproj" />
     <ProjectReference Include="..\OMS.Infrastructure.Messaging.Masstransit\OMS.Infrastructure.Messaging.Masstransit.csproj" />

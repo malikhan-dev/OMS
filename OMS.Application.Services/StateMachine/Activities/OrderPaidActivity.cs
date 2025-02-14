@@ -13,7 +13,6 @@ namespace OMS.Application.Services.StateMachine.Activities
 {
     internal class OrderPaidActivity : Activity<OrderStateInstance, SuccessfullyPaidEvent>
     {
-        private readonly IServiceProvider _ServiceProvider;
         private readonly IOrderCommandRepository _orderCommandRepository;
         private readonly IOrderQueryRepository _orderQueryRepository;
         public OrderPaidActivity(IOrderCommandRepository orderCommandRepository, IOrderQueryRepository orderQueryRepository)

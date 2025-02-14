@@ -1,6 +1,5 @@
 ﻿using Grpc.Core;
 using InventoryService.Proto;
-using MassTransit;
 using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Events;
 

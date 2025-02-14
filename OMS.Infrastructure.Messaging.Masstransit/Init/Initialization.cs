@@ -2,17 +2,12 @@
 using MassTransit;
 using MassTransit.Saga;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OMS.Infrastructure.Messaging.Masstransit.Init
 {
     public static class Initialization
     {
-        public static void InitMasstransit<TStateMachine,TInstance>(IServiceCollection serviceCollection) where TStateMachine :class, SagaStateMachine<TInstance>  where TInstance : class, SagaStateMachineInstance,ISagaVersion
+        public static void InitMasstransit<TStateMachine,TInstance>(this IServiceCollection serviceCollection) where TStateMachine :class, SagaStateMachine<TInstance>  where TInstance : class, SagaStateMachineInstance,ISagaVersion
         {
             serviceCollection.AddMassTransit(cfg =>
             {

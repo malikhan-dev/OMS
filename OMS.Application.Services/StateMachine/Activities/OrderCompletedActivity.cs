@@ -22,7 +22,7 @@ namespace OMS.Application.Services.StateMachine.Activities
 
             CompleteOrder(context.Data.CorrelationId);
 
-            //await next.Execute(context).ConfigureAwait(false);
+            await next.Execute(context).ConfigureAwait(false);
         }
 
         private void CompleteOrder(Guid orderId)
@@ -38,7 +38,7 @@ namespace OMS.Application.Services.StateMachine.Activities
         {
             CompleteOrder(context.Data.OrderId);
 
-            //await next.Execute(context).ConfigureAwait(false);
+            await next.Execute(context).ConfigureAwait(false);
 
         }
 

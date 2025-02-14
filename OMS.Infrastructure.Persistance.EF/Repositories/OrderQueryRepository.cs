@@ -1,11 +1,6 @@
 ﻿using OMS.Domain.Orders;
 using OMS.Domain.Orders.Repositories;
 using OMS.Infrastructure.Persistance.EF.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OMS.Infrastructure.Persistance.EF.Repositories
 {

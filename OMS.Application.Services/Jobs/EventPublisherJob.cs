@@ -1,19 +1,6 @@
-﻿using Dapper;
-using Hangfire;
-using Hangfire.Common;
-using Magnum.Monads.Parser;
-using MassTransit;
+﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MongoDB.Bson.IO;
-using OMS.Application.Services.EventPublisher;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace OMS.Application.Services.Jobs
 {
@@ -35,7 +22,7 @@ namespace OMS.Application.Services.Jobs
                     scope.ServiceProvider
                         .GetRequiredService<PublishJob>();
 
-                RecurringJob.AddOrUpdate(() => scopedProcessingService.Begin(), Cron.Minutely());
+                RecurringJob.AddOrUpdate(() => scopedProcessingService.Begin(),Cron.Minutely());
 
 
             }

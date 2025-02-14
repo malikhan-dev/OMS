@@ -1,9 +1,7 @@
-using Microsoft.Data.SqlClient;
 using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Init;
 using OMS.Infrastructure.Persistance.EF.Initializations;
 using PaymentService.Services;
-using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

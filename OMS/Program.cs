@@ -8,13 +8,12 @@ using OMS.Infrastructure.Persistance.EF.Context;
 using OMS.Infrastructure.Persistance.EF.Initializations;
 using OMS.Application.Services.Init;
 using OMS.Application.Services.StateMachine;
+using OMS.Infrastructure.Messaging.Masstransit.Init;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -30,11 +29,11 @@ string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integr
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
-OMS.Infrastructure.Messaging.Masstransit.Init.Initialization.InitMasstransit<OrderStateMachine,OrderStateInstance>(builder.Services);
+builder.Services.InitMasstransit<OrderStateMachine,OrderStateInstance>();
 
+builder.Services.InitializeJobs();
 
-InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);
-
+builder.Services.InitializeApplicationService(OutBoxDbConstr);
 
 builder.Services.InjectOutboxDb(OutBoxDbConstr);
 

@@ -4,9 +4,9 @@
     {
         public int ProductId { get; set; }
         public int Count { get; set; }
-        public int UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
 
-        public OrderItemValueObject(int productId,int count, int unitprice)
+        public OrderItemValueObject(int productId,int count, double unitprice)
         {
             this.ProductId = productId;
             this.Count = count;

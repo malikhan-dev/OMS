@@ -18,19 +18,16 @@ namespace OMS.Application.Services.Orders
 {
     public class OrderService : IOrderService
     {
-        private readonly IConfiguration configuration;
-        
         private readonly string _PayServerAddress;
-        
+
         private readonly string _InventoryServerAddress;
-        
+
         private readonly IOrderCommandRepository _orderCommandRepository;
-        
-        private readonly IPublishEndpoint _publishEndpoint;
+
 
         private readonly AppEventPublisher appEventPublisher;
 
-        public OrderService(IConfiguration configuration, IOrderCommandRepository orderCommandRepository, IPublishEndpoint publishEndpoint, AppEventPublisher appEventPublisher)
+        public OrderService(IConfiguration configuration, IOrderCommandRepository orderCommandRepository, AppEventPublisher appEventPublisher)
         {
             _PayServerAddress = configuration.GetSection("PayServer")?.Value ?? "";
 
@@ -38,40 +35,39 @@ namespace OMS.Application.Services.Orders
 
             _orderCommandRepository = orderCommandRepository;
 
-            _publishEndpoint = publishEndpoint;
-
             this.appEventPublisher = appEventPublisher;
         }
 
 
-        public async Task<bool> CreateOrder(NewOrderDto dto)
+      
+        public bool CreateOrder(NewOrderDto dto)
         {
             var order = Order.Factory(dto.Items, dto.Description);
-
+            
             _orderCommandRepository.Add(order);
-
+         
             var message = new CreateOrderMessage()
             {
                 CorrelationId = order.Id,
-                OrderItemList = new List<OrderItem>(),
+
+                OrderItemList = dto.Items.Select(x => new OrderItem() { Count = x.Count, ProductId = x.ProductId }).ToList(),
+
                 TotalPrice = order.TotalPrice,
+
+                Description = order.Description,
             };
 
-            appEventPublisher.AddEvent(new AppOutBox()
-            {
-                Content = JsonConvert.SerializeObject(message),
-                Type = message.GetType().AssemblyQualifiedName, 
-            });
+            appEventPublisher.AddEvent(new AppOutBox() { Content = JsonConvert.SerializeObject(message), Type = message.GetType()?.AssemblyQualifiedName ?? "", });
 
 
             Pay(order.Id);
 
-            CheckInventory(order.Id);
+            Inventory(order.Id);
 
             return true;
         }
 
-        private void CheckInventory(Guid orderId)
+        private void Inventory(Guid orderId)
         {
 
             using var channel = GrpcChannel.ForAddress(_InventoryServerAddress);

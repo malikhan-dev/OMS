@@ -65,12 +65,12 @@ namespace OMS.Application.Services.StateMachine
             );
 
             DuringAny(When(StockReservationFailedEvent)
-                .Activity(c => c.OfType<OrderFailedActivity>())
+                .Activity(c => c.OfType<OrderFailedByReservationActivity>())
                 .TransitionTo(OrderFailed));
 
 
             DuringAny(When(PaymentFailedEvent)
-                .Activity(c => c.OfType<OrderFailedActivity>())
+                .Activity(c => c.OfType<OrderFailedByPaymentActivity>())
                 .TransitionTo(OrderFailed));
 
         }

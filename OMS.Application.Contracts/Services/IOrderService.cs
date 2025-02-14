@@ -4,6 +4,6 @@ namespace OMS.Application.Contracts.Services
 {
     public interface IOrderService
     {
-        Task<bool> CreateOrder(NewOrderDto dto);
+        bool CreateOrder(NewOrderDto dto);
     }
 }

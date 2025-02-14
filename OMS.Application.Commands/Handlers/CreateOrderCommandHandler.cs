@@ -11,9 +11,9 @@ namespace OMS.Application.Commands.Handlers
         {
             _orderService = orderService;
         }
-        public async Task<bool> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        public Task<bool> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            return await _orderService.CreateOrder(request.NewOrderDto);
+            return Task.FromResult(_orderService.CreateOrder(request.NewOrderDto));
         }
     }
 }
