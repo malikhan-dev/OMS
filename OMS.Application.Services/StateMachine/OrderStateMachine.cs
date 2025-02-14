@@ -26,7 +26,8 @@ namespace OMS.Application.Services.StateMachine
         {
             InstanceState(x => x.CurrentState);
 
-            //Event(() => CreateOrderMessage, y => y.CorrelateBy<int>(x => x.OrderId, z => z.Message.OrderId).SelectId(context => context));
+
+            Event(() => CreateOrderMessage, y => y.CorrelateBy<Guid>(x => x.OrderId, z => z.Message.CorrelationId).SelectId(context => context.CorrelationId.Value));
 
             Initially(
               When(CreateOrderMessage)
@@ -42,38 +43,37 @@ namespace OMS.Application.Services.StateMachine
 
             During(OrderCreated,
                 When(StockReservedEvent)
-                    .TransitionTo(StockReserved)
-                        .Activity(c => c.OfType<OrderReservedActivity>())
-                    );
+                .Activity(c => c.OfInstanceType<OrderReservedActivity>())
+                .TransitionTo(StockReserved));
 
 
             During(OrderCreated,
               When(SuccessfullyPaidEvent)
-                  .TransitionTo(OrderPaid)
-                  .Activity(c=>c.OfType<OrderPaidActivity>()));
+                                .Activity(c => c.OfInstanceType<OrderPaidActivity>())
+                                .TransitionTo(OrderPaid));
 
 
             During(StockReserved,
                 When(SuccessfullyPaidEvent)
-                   .TransitionTo(OrderCompleted)
-                   .Activity(c=>c.OfType<OrderCompletedActivity>())
+                                   .Activity(c => c.OfType<OrderCompletedActivity>())
+                                   .TransitionTo(OrderCompleted)
                    );
 
             During(OrderPaid,
                 When(StockReservedEvent)
-                .TransitionTo(OrderCompleted)
                 .Activity(c => c.OfType<OrderCompletedActivity>())
+                .TransitionTo(OrderCompleted)
 
             );
 
             DuringAny(When(StockReservationFailedEvent)
-                        .TransitionTo(OrderFailed)
-                                .Activity(c => c.OfType<OrderFailedActivity>()));
+                .Activity(c => c.OfType<OrderFailedActivity>())
+                .TransitionTo(OrderFailed));
 
 
             DuringAny(When(PaymentFailedEvent)
-                      .TransitionTo(OrderFailed)
-                                .Activity(c => c.OfType<OrderFailedActivity>()));
+                .Activity(c => c.OfType<OrderFailedActivity>())
+                .TransitionTo(OrderFailed));
 
         }
 

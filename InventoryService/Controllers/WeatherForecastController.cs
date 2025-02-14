@@ -1,33 +1,48 @@
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using OMS.Application.Services.EventPublisher;
+using OMS.Application.Services.Events;
 
 namespace InventoryService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class InventoryController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly AppEventPublisher _eventPublisher;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public InventoryController(AppEventPublisher eventPublisher)
         {
-            _logger = logger;
+            _eventPublisher = eventPublisher;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpPut(Name = "Inventory-Confirm")]
+        public OkResult Confirm([FromQuery] Guid guid)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var reserved = Random.Shared.NextDouble() > 0.5;
+
+            if (reserved)
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                _eventPublisher.AddEvent(new AppOutBox()
+                {
+                    Content = Newtonsoft.Json.JsonConvert.SerializeObject(new StockReserved() { CorrelationId = guid }),
+                    Type = typeof(StockReserved).AssemblyQualifiedName,
+
+                });
+
+            }
+            else
+            {
+                _eventPublisher.AddEvent(new AppOutBox()
+                {
+                    Content = Newtonsoft.Json.JsonConvert.SerializeObject(new StockReservationFailed() { CorrelationId = guid }),
+                    Type = typeof(StockReservationFailed).AssemblyQualifiedName,
+
+                });
+            }
+
+            return Ok();
         }
     }
 }

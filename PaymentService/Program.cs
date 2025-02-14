@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Init;
+using OMS.Infrastructure.Persistance.EF.Initializations;
 using PaymentService.Services;
 using System.Data;
 
@@ -19,13 +20,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AppEventPublisher>();
 
-
 string OutBoxDbConstr = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
 
-builder.Services.AddKeyedTransient<IDbConnection, SqlConnection>("OutBoxConnection", (ServiceProvider, cnt) => new SqlConnection(OutBoxDbConstr));
+string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True";
 
+builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
 InitializeApp.InitMassTransit(builder.Services);
+
+
+InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);
+
+
+builder.Services.InjectOutboxDb(OutBoxDbConstr);
 
 var app = builder.Build();
 

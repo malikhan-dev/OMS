@@ -8,9 +8,9 @@ namespace OMS.Application.Services.StateMachine.Activities
     public class OrderFailedActivity : Activity<OrderStateInstance, StockReservationFailed>, Activity<OrderStateInstance, PaymentFailedEvent>
     {
 
-        private readonly IOrderQueryRepository _orderQueryRepository;
+        private  IOrderQueryRepository _orderQueryRepository;
 
-        private readonly IOrderCommandRepository _orderRepository;
+        private  IOrderCommandRepository _orderRepository;
 
         public OrderFailedActivity(IOrderCommandRepository orderRepository, IOrderQueryRepository orderQueryRepository)
         {
@@ -19,11 +19,7 @@ namespace OMS.Application.Services.StateMachine.Activities
             _orderQueryRepository = orderQueryRepository;
         }
 
-        public void Accept(StateMachineVisitor visitor)
-        {
-            throw new NotImplementedException();
-        }
-
+ 
         public async  Task Execute(BehaviorContext<OrderStateInstance, StockReservationFailed> context, Behavior<OrderStateInstance, StockReservationFailed> next)
         {
             await Failed(context.Data.CorrelationId);
@@ -42,24 +38,40 @@ namespace OMS.Application.Services.StateMachine.Activities
             return Task.CompletedTask;
         }
 
-        public async Task Execute(BehaviorContext<OrderStateInstance, PaymentFailedEvent> context, Behavior<OrderStateInstance, PaymentFailedEvent> next)
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, StockReserved, TException> context, Behavior<OrderStateInstance, StockReserved> next) where TException : Exception
         {
-             await Failed(context.Data.CorrelationId);
+            return next.Faulted(context);
         }
 
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, StockReservationFailed, TException> context, Behavior<OrderStateInstance, StockReservationFailed> next) where TException : Exception
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, SuccessfullyPaidEvent, TException> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next) where TException : Exception
         {
-            throw new NotImplementedException();
-        }
-
-        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, PaymentFailedEvent, TException> context, Behavior<OrderStateInstance, PaymentFailedEvent> next) where TException : Exception
-        {
-            throw new NotImplementedException();
+            return next.Faulted(context);
         }
 
         public void Probe(ProbeContext context)
         {
-            throw new NotImplementedException();
+            context.CreateScope("publish-order-closed");
+        }
+
+        public void Accept(StateMachineVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, StockReservationFailed, TException> context, Behavior<OrderStateInstance, StockReservationFailed> next) where TException : Exception
+        {
+            return next.Faulted(context);
+        }
+
+        public async Task Execute(BehaviorContext<OrderStateInstance, PaymentFailedEvent> context, Behavior<OrderStateInstance, PaymentFailedEvent> next)
+        {
+            await Failed(context.Data.CorrelationId);
+            await next.Execute(context).ConfigureAwait(false);
+        }
+
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, PaymentFailedEvent, TException> context, Behavior<OrderStateInstance, PaymentFailedEvent> next) where TException : Exception
+        {
+            return next.Faulted(context);
         }
     }
 

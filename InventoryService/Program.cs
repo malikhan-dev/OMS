@@ -1,7 +1,7 @@
-using InventoryService.Services;
 using Microsoft.Data.SqlClient;
 using OMS.Application.Services.EventPublisher;
 using OMS.Application.Services.Init;
+using OMS.Infrastructure.Persistance.EF.Initializations;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +16,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AppEventPublisher>();
 
-string OutboxConnectionString = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
+string OutBoxDbConstr = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
 
-builder.Services.AddKeyedTransient<IDbConnection, SqlConnection>("OutBoxConnection", (ServiceProvider, cnt) => new SqlConnection(OutboxConnectionString));
+string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True";
+
+builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
+
 InitializeApp.InitMassTransit(builder.Services);
+
+
+InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);
+
+
+builder.Services.InjectOutboxDb(OutBoxDbConstr);
 
 var app = builder.Build();
 
@@ -29,7 +38,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.MapGrpcService<InventoryHandler>();
 
 app.UseHttpsRedirection();
 

@@ -44,9 +44,9 @@ namespace OMS.Application.Services.Jobs
 
                         await eventPublisher.Publish(res);
 
-                        var command = connection.Execute("update dbo.OutBoxes set RetryCount = RetryCount +1, Published = 1 where id = @id", new { @id = item.Id });
+                        var command = connection.Execute("update dbo.OutBoxes set RetryCount = RetryCount + 1, Published = 1 where id = @id", new { @id = item.Id });
 
-                        Thread.Sleep(10000);
+                        Thread.Sleep(20000);
 
                     }
                     catch

@@ -11,51 +11,69 @@ using System.Threading.Tasks;
 
 namespace OMS.Application.Services.StateMachine.Activities
 {
-    internal class OrderPaidActivity : Activity<OrderStateInstance, SuccessfullyPaidEvent>
-    {        
+    internal class OrderPaidActivity : Activity<OrderStateInstance>
+    {
         private readonly IServiceProvider _ServiceProvider;
-        public OrderPaidActivity(IServiceProvider serviceProvider)
+        private readonly IOrderCommandRepository _orderCommandRepository;
+        private readonly IOrderQueryRepository _orderQueryRepository;
+        public OrderPaidActivity(IOrderCommandRepository orderCommandRepository, IOrderQueryRepository orderQueryRepository)
         {
-            _ServiceProvider = serviceProvider;
+            _orderCommandRepository = orderCommandRepository;
+            _orderQueryRepository = orderQueryRepository;
         }
         public void Accept(StateMachineVisitor visitor)
         {
             throw new NotImplementedException();
         }
-
-        public async Task Execute(BehaviorContext<OrderStateInstance, SuccessfullyPaidEvent> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next)
+        public async Task Execute(BehaviorContext<OrderStateInstance> context, Behavior<OrderStateInstance> next)
         {
-            using (var scope = _ServiceProvider.CreateScope())
-            {
-                var _orderCommandRepository =
-                    scope.ServiceProvider
-                        .GetRequiredService<IOrderCommandRepository>();
 
 
-                var _orderQueryRepository = scope.ServiceProvider
-                        .GetRequiredService<IOrderQueryRepository>();
+            var model = _orderQueryRepository.GetById(context.Instance.CorrelationId);
 
-                var model = _orderQueryRepository.GetById(context.Data.CorrelationId);
+            model.Paid();
 
-                model.Paid();
+            _orderCommandRepository.Update(model);
 
-                _orderCommandRepository.Update(model);
-
-                await next.Execute(context).ConfigureAwait(false);
+            await next.Execute(context).ConfigureAwait(false);
 
 
-            }
+
+        }
+
+        public async Task Execute<T>(BehaviorContext<OrderStateInstance, T> context, Behavior<OrderStateInstance, T> next)
+        {
+
+            var model = _orderQueryRepository.GetById(context.Instance.CorrelationId);
+
+            model.Paid();
+
+            _orderCommandRepository.Update(model);
+
+            await next.Execute(context).ConfigureAwait(false);
+
+
 
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, SuccessfullyPaidEvent, TException> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next) where TException : Exception
+        {
+            return next.Faulted(context);
+        }
+
+        public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, TException> context, Behavior<OrderStateInstance> next) where TException : Exception
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Faulted<T, TException>(BehaviorExceptionContext<OrderStateInstance, T, TException> context, Behavior<OrderStateInstance, T> next) where TException : Exception
         {
             throw new NotImplementedException();
         }
 
         public void Probe(ProbeContext context)
         {
-            throw new NotImplementedException();
+            context.CreateScope("publish-order-closed");
         }
     }
 }

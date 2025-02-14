@@ -63,25 +63,15 @@ namespace OMS.Application.Services.Orders
                 Type = message.GetType().AssemblyQualifiedName, 
             });
 
-            CheckInventory(order.Id);
 
-            CheckPayment(order.Id);
+            Pay(order.Id);
 
             return true;
         }
 
-        private void CheckInventory(Guid orderId)
-        {
+   
 
-            using var channel = GrpcChannel.ForAddress(_InventoryServerAddress);
-
-            var client = new InventoryService.Proto.Inventory.InventoryClient(channel);
-
-            client.CheckInventory(new InventoryCheckRequest { OrderId = orderId.ToString() });
-
-        }
-
-        private void CheckPayment(Guid orderId)
+        private void Pay(Guid orderId)
         {
             using var channel = GrpcChannel.ForAddress(_PayServerAddress);
 

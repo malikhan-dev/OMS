@@ -23,13 +23,9 @@ namespace OMS.Application.Services.StateMachine.Activities
             _serviceProvider = serviceProvider;
         }
 
-        public void Accept(StateMachineVisitor visitor)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task Execute(BehaviorContext<OrderStateInstance, StockReserved> context, Behavior<OrderStateInstance, StockReserved> next)
         {
+           
             CompleteOrder(context.Data.CorrelationId);
 
             await next.Execute(context).ConfigureAwait(false);
@@ -47,7 +43,7 @@ namespace OMS.Application.Services.StateMachine.Activities
                 var _orderQueryRepository = scope.ServiceProvider
                         .GetRequiredService<IOrderQueryRepository>();
 
-                var model = this._orderQueryRepository.GetById(orderId);
+                var model = _orderQueryRepository.GetById(orderId);
 
                 model.Completed();
 
@@ -58,26 +54,32 @@ namespace OMS.Application.Services.StateMachine.Activities
                
         }
 
-        public Task Execute(BehaviorContext<OrderStateInstance, SuccessfullyPaidEvent> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next)
+        public async Task Execute(BehaviorContext<OrderStateInstance, SuccessfullyPaidEvent> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next)
         {
-            CompleteOrder(context.Data.OrderId);
+             CompleteOrder(context.Data.OrderId);
 
-            return Task.CompletedTask;
+             await next.Execute(context).ConfigureAwait(false);
+
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, StockReserved, TException> context, Behavior<OrderStateInstance, StockReserved> next) where TException : Exception
         {
-            throw new NotImplementedException();
+            return next.Faulted(context);
         }
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, SuccessfullyPaidEvent, TException> context, Behavior<OrderStateInstance, SuccessfullyPaidEvent> next) where TException : Exception
         {
-            throw new NotImplementedException();
+            return next.Faulted(context);
         }
 
         public void Probe(ProbeContext context)
         {
-            throw new NotImplementedException();
+            context.CreateScope("publish-order-closed");
+        }
+
+        public void Accept(StateMachineVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

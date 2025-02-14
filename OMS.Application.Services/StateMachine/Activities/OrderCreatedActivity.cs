@@ -20,12 +20,17 @@ namespace OMS.Application.Services.StateMachine.Activities
 
         public Task Faulted<TException>(BehaviorExceptionContext<OrderStateInstance, CreateOrderMessage, TException> context, Behavior<OrderStateInstance, CreateOrderMessage> next) where TException : Exception
         {
-            throw new NotImplementedException();
+            return next.Faulted(context);
         }
 
         public void Probe(ProbeContext context)
         {
+            context.CreateScope("publish-order-closed");
         }
+
+      
+
+     
     }
 
 }

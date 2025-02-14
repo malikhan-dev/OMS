@@ -35,7 +35,7 @@ namespace OMS.Application.Services.Jobs
                     scope.ServiceProvider
                         .GetRequiredService<PublishJob>();
 
-                RecurringJob.AddOrUpdate(() => scopedProcessingService.Begin(), Cron.Minutely);
+                RecurringJob.AddOrUpdate(() => scopedProcessingService.Begin(), Cron.Minutely());
 
 
             }
