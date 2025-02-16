@@ -8,7 +8,7 @@ namespace OMS.Infrastructure.Persistance.EF.Design
     {
         public OrderContext CreateDbContext(string[] args)
         {
-            string MigrationConnectionString = "Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True";
+            string MigrationConnectionString = "Data Source=localhost,1433;Initial Catalog=OMS;User Id=sa;password=Your_password123;TrustServerCertificate=True";
 
 
             var builder = new DbContextOptionsBuilder<OrderContext>();

@@ -4,10 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>0ff94cb5-7b67-4f21-a92e-474bf2f21751</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
 	</ItemGroup>
  <ItemGroup>
     <Protobuf Include="Protos\PaymentService.proto" GrpcServices="Server" />

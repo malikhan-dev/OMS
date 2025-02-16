@@ -26,7 +26,7 @@ namespace OMS.Infrastructure.Messaging.Masstransit.Init
                 {
 
                     prv.ConfigureEndpoints(cnt);
-                    prv.Host("localhost", "/", host =>
+                    prv.Host("RabbitMqServer", "/", host =>
                     {
                         host.Username("guest");
                         host.Password("guest");
@@ -49,7 +49,7 @@ namespace OMS.Infrastructure.Messaging.Masstransit.Init
                 {
 
                     prv.ConfigureEndpoints(cnt);
-                    prv.Host("localhost", "/", host =>
+                    prv.Host("RabbitMqServer", "/", host =>
                     {
                         host.Username("guest");
                         host.Password("guest");

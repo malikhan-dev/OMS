@@ -8,7 +8,7 @@ namespace OMS.Infrastructure.Persistance.EF.Design
     {
         public OutboxDbContext CreateDbContext(string[] args)
         {
-            string MigrationConnectionString = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
+            string MigrationConnectionString = "Data Source=localhost,1433;Initial Catalog=OutBox;User Id=sa;password=Your_password123;TrustServerCertificate=True";
 
 
             var builder = new DbContextOptionsBuilder<OutboxDbContext>();

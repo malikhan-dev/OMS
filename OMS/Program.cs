@@ -29,7 +29,7 @@ string AppConnectionStr = builder.Configuration.GetSection("AppConstr").Value;
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
-builder.Services.InitMasstransit<OrderStateMachine,OrderStateInstance>();
+builder.Services.InitMasstransit<OrderStateMachine, OrderStateInstance>();
 
 builder.Services.InitializeJobs();
 
@@ -40,11 +40,10 @@ builder.Services.InjectOutboxDb(OutBoxDbConstr);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
