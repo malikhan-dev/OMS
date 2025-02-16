@@ -7,7 +7,7 @@ namespace OMS.Infrastructure.Messaging.Masstransit.Init
 {
     public static class Initialization
     {
-        public static void InitMasstransit<TStateMachine,TInstance>(this IServiceCollection serviceCollection, string mongoDbConnection = "mongodb://127.0.0.1:27017") where TStateMachine :class, SagaStateMachine<TInstance>  where TInstance : class, SagaStateMachineInstance,ISagaVersion
+        public static void InitMasstransit<TStateMachine,TInstance>(this IServiceCollection serviceCollection, string mongoDbConnection = "mongodb://MongoDb") where TStateMachine :class, SagaStateMachine<TInstance>  where TInstance : class, SagaStateMachineInstance,ISagaVersion
         {
             serviceCollection.AddMassTransit(cfg =>
             {

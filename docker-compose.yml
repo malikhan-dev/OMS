@@ -14,6 +14,7 @@ services:
       - InventoryServ
       - PaymentServ
       - RabbitMqServer
+      - MongoDb
   InventoryServ:
     image: inventoryservice
     build:
@@ -24,6 +25,17 @@ services:
       - "5003:8081"
     depends_on:
       - RabbitMqServer
+
+  MongoDb:
+      image: mongodb/mongodb-community-server:latest
+      ports:
+      - '27017:27017'
+
+  EventStoreDb:
+    image: eventstore/eventstore:release-5.0.11
+    ports: 
+      - 1113:1113
+      - 2113:2113
 
   PaymentServ:
     image: paymentservice
