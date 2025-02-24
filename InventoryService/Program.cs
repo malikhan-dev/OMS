@@ -17,13 +17,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AppEventPublisher>();
 
-string OutBoxDbConstr = "Data Source=localhost,1433;Initial Catalog=OutBox;Integrated Security = true;TrustServerCertificate=True";
+string OutBoxDbConstr = "Data Source=localhost,1433;Initial Catalog=OutBox;User Id=sa;password=Your_password123;TrustServerCertificate=True;";
 
-string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;Integrated Security = true;TrustServerCertificate=True";
+string AppConnectionStr = "Data Source=localhost,1433;Initial Catalog=OMS;User Id=sa;password=Your_password123;TrustServerCertificate=True;";
+
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
-OMS.Infrastructure.Messaging.Masstransit.Init.Initialization.InitMasstransit(builder.Services);
 
 
 InitializeApp.InitializeApplicationService(builder.Services, OutBoxDbConstr);

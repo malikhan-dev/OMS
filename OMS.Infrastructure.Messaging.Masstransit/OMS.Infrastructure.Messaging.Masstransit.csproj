@@ -14,5 +14,8 @@
 		<PackageReference Include="MassTransit.RabbitMQ" Version="7.2.2" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\OMS.Application.Services\OMS.Application.Services.csproj" />
+	</ItemGroup>
 
 </Project>

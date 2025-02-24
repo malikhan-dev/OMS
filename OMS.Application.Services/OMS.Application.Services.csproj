@@ -32,7 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\OMS.Application.Contracts\OMS.Application.Contracts.csproj" />
     <ProjectReference Include="..\OMS.Domain\OMS.Domain.csproj" />
-    <ProjectReference Include="..\OMS.Infrastructure.Messaging.Masstransit\OMS.Infrastructure.Messaging.Masstransit.csproj" />
   </ItemGroup>
 
 </Project>

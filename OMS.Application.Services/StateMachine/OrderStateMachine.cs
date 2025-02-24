@@ -24,6 +24,8 @@ namespace OMS.Application.Services.StateMachine
         private State OrderCompleted { get; set; }
         public OrderStateMachine()
         {
+
+           
             InstanceState(x => x.CurrentState);
 
             Event(() => CreateOrderMessage, y => y.CorrelateBy<Guid>(x => x.OrderId, z => z.Message.CorrelationId).SelectId(context => context.CorrelationId.Value));

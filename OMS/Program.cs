@@ -29,7 +29,7 @@ string AppConnectionStr = builder.Configuration.GetSection("AppConstr").Value;
 
 builder.Services.InjectSqlServerEfCoreDependencies(AppConnectionStr);
 
-builder.Services.InitMasstransit<OrderStateMachine, OrderStateInstance>();
+builder.Services.InitMasstransit();
 
 builder.Services.InitializeJobs();
 
