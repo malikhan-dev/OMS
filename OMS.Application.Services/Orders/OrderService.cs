@@ -55,6 +55,8 @@ namespace OMS.Application.Services.Orders
                 TotalPrice = order.TotalPrice,
 
                 Description = order.Description,
+
+                OrderId = order.Id, 
             };
 
             appEventPublisher.AddEvent(new AppOutBox() { Content = JsonConvert.SerializeObject(message), Type = message.GetType()?.AssemblyQualifiedName ?? "", });

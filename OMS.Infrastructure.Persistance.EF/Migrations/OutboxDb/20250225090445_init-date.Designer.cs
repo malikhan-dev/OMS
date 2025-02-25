@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OMS.Infrastructure.Persistance.EF.Context;
 
@@ -11,9 +12,11 @@ using OMS.Infrastructure.Persistance.EF.Context;
 namespace OMS.Infrastructure.Persistance.EF.Migrations.OutboxDb
 {
     [DbContext(typeof(OutboxDbContext))]
-    partial class OutboxDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250225090445_init-date")]
+    partial class initdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

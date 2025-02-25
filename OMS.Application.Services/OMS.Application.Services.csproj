@@ -25,6 +25,12 @@
 		<Protobuf Include="Protos\InventoryService.proto" GrpcServices="Client" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+		<PackageReference Include="MassTransit.EntityFrameworkCore" Version="7.2.2" />
+		<PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
+		<PackageReference Include="MassTransit.MongoDb" Version="7.2.2" />
+		<PackageReference Include="MassTransit.Persistence.MongoDb" Version="2.0.0" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="7.2.2" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
 		<PackageReference Include="EventStore.Client.Grpc.Streams" Version="22.0.0" />
 		<PackageReference Include="EventStore.Client" Version="22.0.0" />

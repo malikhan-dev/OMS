@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OMS.Infrastructure.Messaging.Masstransit\OMS.Infrastructure.Messaging.Masstransit.csproj" />
     <ProjectReference Include="..\OMS.Infrastructure.Persistance.EF\OMS.Infrastructure.Persistance.EF.csproj" />
   </ItemGroup>
 

@@ -5,7 +5,7 @@ using MassTransit.Saga;
 using Microsoft.Extensions.DependencyInjection;
 using OMS.Application.Services.StateMachine;
 
-namespace OMS.Infrastructure.Messaging.Masstransit.Init
+namespace OMS.Application.Services.Init
 {
     public static class Initialization
     {
@@ -15,7 +15,7 @@ namespace OMS.Infrastructure.Messaging.Masstransit.Init
             serviceCollection.AddMassTransit(cfg =>
             {
                 cfg.SetSnakeCaseEndpointNameFormatter();
-                
+
 
                 cfg.AddSagaStateMachine<OrderStateMachine, OrderStateInstance>(cfg =>
                 {
@@ -86,12 +86,12 @@ namespace OMS.Infrastructure.Messaging.Masstransit.Init
         {
             serviceCollection.AddMassTransit(cfg =>
             {
-                
+
                 cfg.SetSnakeCaseEndpointNameFormatter();
 
                 cfg.UsingRabbitMq((cnt, prv) =>
                 {
-                    
+
                     prv.ConfigureEndpoints(cnt);
                     prv.Host("localhost", "/", host =>
                     {

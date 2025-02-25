@@ -19,7 +19,7 @@ namespace OMS.Application.Services.EventPublisher
                 {
                     _connection.Open();
                     
-                    string insertQuery = @"INSERT INTO [dbo].[OutBoxes]( [Content], [Type], [Published], [RetryCount] ) Values (@Content,@Type,@Published,@RetryCount) ";
+                    string insertQuery = @"INSERT INTO [dbo].[OutBoxes]( [Content], [Type], [Published], [RetryCount],[Date] ) Values (@Content,@Type,@Published,@RetryCount,@Date) ";
 
                     var result = _connection.Execute(insertQuery, new
                     {
@@ -27,6 +27,7 @@ namespace OMS.Application.Services.EventPublisher
                         @Type = @event.Type,
                         @Published = false,
                         @RetryCount = 0,
+                        @Date = DateTime.Now,
                     });
 
                     _connection.Close();

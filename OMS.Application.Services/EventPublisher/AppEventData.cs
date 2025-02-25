@@ -10,5 +10,6 @@ namespace OMS.Application.Services.EventPublisher
         public string Type { get; set; }
         public int RetryCount { get; set; }
         public bool Published { get; set; }
+        public DateTime Date { get; set; }
     }
 }

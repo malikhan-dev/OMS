@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "PaymentSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryService", "InventoryService\InventoryService.csproj", "{D468E5D8-0566-43A8-9CA3-DFF40B6F1087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMS.Infrastructure.Messaging.Masstransit", "OMS.Infrastructure.Messaging.Masstransit\OMS.Infrastructure.Messaging.Masstransit.csproj", "{7D4A0A3C-37BA-4BC2-BC34-3971AB2F2D9A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{08137810-D564-4393-A7BA-0799B1FD3FC7}"
 EndProject
 Global
@@ -73,10 +71,6 @@ Global
 		{D468E5D8-0566-43A8-9CA3-DFF40B6F1087}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D468E5D8-0566-43A8-9CA3-DFF40B6F1087}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D468E5D8-0566-43A8-9CA3-DFF40B6F1087}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D4A0A3C-37BA-4BC2-BC34-3971AB2F2D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D4A0A3C-37BA-4BC2-BC34-3971AB2F2D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D4A0A3C-37BA-4BC2-BC34-3971AB2F2D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D4A0A3C-37BA-4BC2-BC34-3971AB2F2D9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,7 +82,6 @@ Global
 		{918BAAC6-D569-4F4F-A18C-97A2A270FB5D} = {FAF74449-4DDD-4F4E-A3E1-9842EDC8FEFB}
 		{313A7F7C-B1FF-4DE6-AD8D-1D1425FD0D50} = {74258631-D96A-4428-A24B-A6B24AD2A600}
 		{55325A87-6098-418E-80A9-FB89F8740E1B} = {35C353D3-71EC-4E49-9674-8823A59722D7}
-		{7D4A0A3C-37BA-4BC2-BC34-3971AB2F2D9A} = {74258631-D96A-4428-A24B-A6B24AD2A600}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A07A9B8-9839-4090-A452-F253ABEA2462}

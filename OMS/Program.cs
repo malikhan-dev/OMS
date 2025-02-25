@@ -8,7 +8,6 @@ using OMS.Infrastructure.Persistance.EF.Context;
 using OMS.Infrastructure.Persistance.EF.Initializations;
 using OMS.Application.Services.Init;
 using OMS.Application.Services.StateMachine;
-using OMS.Infrastructure.Messaging.Masstransit.Init;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
