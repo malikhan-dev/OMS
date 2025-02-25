@@ -54,14 +54,14 @@ namespace OMS.Application.Services.StateMachine
 
             DuringAny(When(StockReservationFailedEvent)
                 .Activity(c => c.OfType<OrderFailedByReservationActivity>())
-                .Finalize()
+                .RequestCompleted()
                 .TransitionTo(OrderFailed));
 
 
 
             DuringAny(When(PaymentFailedEvent)
                 .Activity(c => c.OfType<OrderFailedByPaymentActivity>())
-                .Finalize()
+                .RequestCompleted()
                 .TransitionTo(OrderFailed));
 
 
@@ -80,13 +80,13 @@ namespace OMS.Application.Services.StateMachine
             During(StockReserved,
                 When(SuccessfullyPaidEvent)
                     .Activity(c => c.OfType<OrderCompletedActivity>())
-                    .Finalize()
+                    .RequestCompleted()
                     .TransitionTo(OrderCompleted));
 
             During(OrderPaid,
                 When(StockReservedEvent)
                 .Activity(c => c.OfType<OrderCompletedActivity>())
-                .Finalize()
+                .RequestCompleted()
                 .TransitionTo(OrderCompleted)
 
             );

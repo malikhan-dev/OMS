@@ -2,7 +2,7 @@ import http from "k6/http"
 import { sleep } from "k6"
 
 export const options = {
-    vus: 70, // A string specifying the total duration of the test run.
+    vus: 40, // A string specifying the total duration of the test run.
     duration: "60s",
 }
 
@@ -20,7 +20,6 @@ const payload = JSON.stringify({
 
 export default function () {
     http.post("https://localhost:7030/Order", payload,
-
         {
             headers: {
                 'Content-Type': 'application/json',
